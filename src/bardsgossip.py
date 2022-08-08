@@ -2,10 +2,13 @@
 
 import argparse
 from bs4 import BeautifulSoup
+from datetime import datetime
 import importlib
 import json
 import requests
 import sys
+from urllib.parse import quote_plus
+import webbrowser
 
 # import pyperclip for non-pythonista and clipboard for pythonista
 PYPERCLIP = importlib.util.find_spec("pyperclip")
