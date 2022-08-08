@@ -43,7 +43,7 @@ def getAmazonMusicLink(apiURI, sourceURI):
 def getAppleMusicLink(apiURI, sourceURI):
   links = fetchLinks(apiURI, sourceURI)
   templatedLink = links["itunes"][0]["link"]
-  return templatedLink.replace("{country}", "US")
+  return templatedLink.replace("{country}", "us")
 
 def getDeezerLink(apiURI, sourceURI):
   links = fetchLinks(apiURI, sourceURI)
