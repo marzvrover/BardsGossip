@@ -20,7 +20,6 @@ elif CLIPBOARD != None:
   import clipboard
 
 API_URI = "https://songwhip.com/"
-source_uri = "https://open.spotify.com/track/5YxtCGHvn9oE43NM9Hh5VE?si=b85zlpa8SA6CswoWRLUCXw"
 
 def fetchLinks(apiURI, sourceURI):
   data_json = {"url": sourceURI}
