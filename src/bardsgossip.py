@@ -2,9 +2,19 @@
 
 import argparse
 from bs4 import BeautifulSoup
+import importlib
 import json
-import pyperclip
 import requests
+import sys
+
+# import pyperclip for non-pythonista and clipboard for pythonista
+PYPERCLIP = importlib.util.find_spec("pyperclip")
+CLIPBOARD = importlib.util.find_spec("clipboard")
+
+if PYPERCLIP != None:
+  import pyperclip
+elif CLIPBOARD != None:
+  import clipboard
 
 API_URI = "https://songwhip.com/"
 source_uri = "https://open.spotify.com/track/5YxtCGHvn9oE43NM9Hh5VE?si=b85zlpa8SA6CswoWRLUCXw"
@@ -126,6 +136,12 @@ def findLink(args):
     return getYouTubeMusicLink(API_URI, args.url)
 
 def copyToClipboard(link):
-  pyperclip.copy(link)
+  if PYPERCLIP != None:
+    pyperclip.copy(link)
+  elif CLIPBOARD != None:
+    clipboard.set(link)
+  else:
+    print("No clipboard found", file=sys.stderr)
+    exit(1)
 
 main()
