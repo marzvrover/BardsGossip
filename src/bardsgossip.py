@@ -96,6 +96,8 @@ def main():
     copyToClipboard(link)
   if args.open == True:
     webbrowser.open(link)
+  if args.x_callback_url != None:
+    callbackSuccess(args, link)
 
 def parseArgs():
   parser = argparse.ArgumentParser(description="Convert your music links to other music services")
@@ -103,6 +105,7 @@ def parseArgs():
   parser.add_argument("--open", action="store_true", help="Open the link in a browser")
   parser.add_argument("--copy", action="store_true", help="Copy the link to your clipboard")
   parser.add_argument("--silent", action="store_true", help="Don't print the link")
+  parser.add_argument("x_callback_url", metavar="x-callback-url", nargs='?', help="URI for x-callback-url")
   group = parser.add_mutually_exclusive_group(required=True)
   group.add_argument("--amazon-music", action="store_true", help="Get the Amazon Music link")
   group.add_argument("--apple-music", action="store_true", help="Get the Apple Music link")
@@ -149,5 +152,9 @@ def copyToClipboard(link):
   else:
     print("No clipboard found", file=sys.stderr)
     exit(1)
+
+def callbackSuccess(args, link):
+  callback=f"{args.x_callback_url}?x-source=pythonista3&datetime={quote_plus(str(datetime.today()))}&result={link}"
+  webbrowser.open(callback)
 
 main()
