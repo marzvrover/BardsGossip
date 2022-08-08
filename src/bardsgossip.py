@@ -74,7 +74,13 @@ def getYouTubeMusicLink(apiURI, sourceURI):
   return links["youtubeMusic"][0]["link"]
 
 def main():
+  args = parseArgs()
+  link = findLink(args)
+  print(link)
+
+def parseArgs():
   parser = argparse.ArgumentParser(description="Convert your music links to other music services")
+  parser.add_argument("url", nargs=1, help="The URL of the song you want to convert")
   group = parser.add_mutually_exclusive_group()
   group.add_argument("--amazon-music", action="store_true", help="Get the Amazon Music link")
   group.add_argument("--apple-music", action="store_true", help="Get the Apple Music link")
@@ -87,7 +93,30 @@ def main():
   group.add_argument("--tidal", action="store_true", help="Get the Tidal link")
   group.add_argument("--youtube", action="store_true", help="Get the YouTube link")
   group.add_argument("--youtube-music", action="store_true", help="Get the YouTube Music link")
-  args = parser.parse_args()
-  print(args)
+  return parser.parse_args()
+
+def findLink(args):
+  if args.amazon_music == True:
+    return getAmazonMusicLink(API_URI, args.url)
+  elif args.apple_music == True:
+    return getAppleMusicLink(API_URI, args.url)
+  elif args.deezer == True:
+    return getDeezerLink(API_URI, args.url)
+  elif args.napster == True:
+    return getNapsterLink(API_URI, args.url)
+  elif args.pandora == True:
+    return getPandoraLink(API_URI, args.url)
+  elif args.qobuz == True:
+    return getQobuzLink(API_URI, args.url)
+  elif args.songwhip == True:
+    return getSongwhipLink(API_URI, args.url)
+  elif args.spotify == True:
+    return getSpotifyLink(API_URI, args.url)
+  elif args.tidal == True:
+    return getTidalLink(API_URI, args.url)
+  elif args.youtube == True:
+    return getYouTubeLink(API_URI, args.url)
+  elif args.youtube_music == True:
+    return getYouTubeMusicLink(API_URI, args.url)
 
 main()
