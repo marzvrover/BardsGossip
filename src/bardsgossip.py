@@ -1,9 +1,10 @@
 #!/usr/local/bin/python3
 
 import argparse
-import requests
-import json
 from bs4 import BeautifulSoup
+import json
+import pyperclip
+import requests
 
 API_URI = "https://songwhip.com/"
 source_uri = "https://open.spotify.com/track/5YxtCGHvn9oE43NM9Hh5VE?si=b85zlpa8SA6CswoWRLUCXw"
@@ -76,12 +77,17 @@ def getYouTubeMusicLink(apiURI, sourceURI):
 def main():
   args = parseArgs()
   link = findLink(args)
-  print(link)
+  if args.silent == False:
+    print(link)
+  if args.copy == True:
+    copyToClipboard(link)
 
 def parseArgs():
   parser = argparse.ArgumentParser(description="Convert your music links to other music services")
   parser.add_argument("url", nargs=1, help="The URL of the song you want to convert")
-  group = parser.add_mutually_exclusive_group()
+  parser.add_argument("--copy", action="store_true", help="Copy the link to your clipboard")
+  parser.add_argument("--silent", action="store_true", help="Don't print the link")
+  group = parser.add_mutually_exclusive_group(required=True)
   group.add_argument("--amazon-music", action="store_true", help="Get the Amazon Music link")
   group.add_argument("--apple-music", action="store_true", help="Get the Apple Music link")
   group.add_argument("--deezer", action="store_true", help="Get the Deezer link")
@@ -118,5 +124,8 @@ def findLink(args):
     return getYouTubeLink(API_URI, args.url)
   elif args.youtube_music == True:
     return getYouTubeMusicLink(API_URI, args.url)
+
+def copyToClipboard(link):
+  pyperclip.copy(link)
 
 main()
