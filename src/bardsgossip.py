@@ -94,10 +94,13 @@ def main():
     print(link)
   if args.copy == True:
     copyToClipboard(link)
+  if args.open == True:
+    webbrowser.open(link)
 
 def parseArgs():
   parser = argparse.ArgumentParser(description="Convert your music links to other music services")
   parser.add_argument("url", nargs=1, help="The URL of the song you want to convert")
+  parser.add_argument("--open", action="store_true", help="Open the link in a browser")
   parser.add_argument("--copy", action="store_true", help="Copy the link to your clipboard")
   parser.add_argument("--silent", action="store_true", help="Don't print the link")
   group = parser.add_mutually_exclusive_group(required=True)
