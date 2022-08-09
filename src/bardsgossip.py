@@ -167,7 +167,7 @@ def getFromClipboard():
     exit(1)
 
 def callbackSuccess(args, link):
-  callback=f"{args.x_callback_url}?x-source=pythonista3&datetime={quote_plus(str(datetime.today()))}&result={link}"
+  callback=f"{args.x_callback_url}?x-source=BardsGossip&datetime={quote_plus(str(datetime.today()))}&result={link}"
   webbrowser.open(callback)
 
 main()
