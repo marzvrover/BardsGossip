@@ -101,53 +101,67 @@ def main():
 def parseArgs():
   parser = argparse.ArgumentParser(description="Convert your music links to other music services")
   parser.add_argument("url", nargs=1, help="The URL of the song you want to convert")
+  parser.add_argument("--paste", action="store_true", help="Paste the link to the clipboard. Still requires url, this is used to get around Shortcut limitations.")
   parser.add_argument("--open", action="store_true", help="Open the link in a browser")
   parser.add_argument("--copy", action="store_true", help="Copy the link to your clipboard")
   parser.add_argument("--silent", action="store_true", help="Don't print the link")
   parser.add_argument("x_callback_url", metavar="x-callback-url", nargs='?', help="Optional: URI for x-callback-url")
-  group = parser.add_mutually_exclusive_group(required=True)
-  group.add_argument("--amazon-music", action="store_true", help="Get the Amazon Music link")
-  group.add_argument("--apple-music", action="store_true", help="Get the Apple Music link")
-  group.add_argument("--deezer", action="store_true", help="Get the Deezer link")
-  group.add_argument("--napster", action="store_true", help="Get the Napster link")
-  group.add_argument("--pandora", action="store_true", help="Get the Pandora link")
-  group.add_argument("--qobuz", action="store_true", help="Get the Qobuz link")
-  group.add_argument("--songwhip", action="store_true", help="Get the Songwhip link")
-  group.add_argument("--spotify", action="store_true", help="Get the Spotify link")
-  group.add_argument("--tidal", action="store_true", help="Get the Tidal link")
-  group.add_argument("--youtube", action="store_true", help="Get the YouTube link")
-  group.add_argument("--youtube-music", action="store_true", help="Get the YouTube Music link")
+  music_service_group = parser.add_mutually_exclusive_group(required=True)
+  music_service_group.add_argument("--amazon-music", action="store_true", help="Get the Amazon Music link")
+  music_service_group.add_argument("--apple-music", action="store_true", help="Get the Apple Music link")
+  music_service_group.add_argument("--deezer", action="store_true", help="Get the Deezer link")
+  music_service_group.add_argument("--napster", action="store_true", help="Get the Napster link")
+  music_service_group.add_argument("--pandora", action="store_true", help="Get the Pandora link")
+  music_service_group.add_argument("--qobuz", action="store_true", help="Get the Qobuz link")
+  music_service_group.add_argument("--songwhip", action="store_true", help="Get the Songwhip link")
+  music_service_group.add_argument("--spotify", action="store_true", help="Get the Spotify link")
+  music_service_group.add_argument("--tidal", action="store_true", help="Get the Tidal link")
+  music_service_group.add_argument("--youtube", action="store_true", help="Get the YouTube link")
+  music_service_group.add_argument("--youtube-music", action="store_true", help="Get the YouTube Music link")
   return parser.parse_args()
 
 def findLink(args):
+  if args.paste == True:
+    url = getFromClipboard()
+  else:
+    url = args.url[0]
   if args.amazon_music == True:
-    return getAmazonMusicLink(API_URI, args.url)
+    return getAmazonMusicLink(API_URI, url)
   elif args.apple_music == True:
-    return getAppleMusicLink(API_URI, args.url)
+    return getAppleMusicLink(API_URI, url)
   elif args.deezer == True:
-    return getDeezerLink(API_URI, args.url)
+    return getDeezerLink(API_URI, url)
   elif args.napster == True:
-    return getNapsterLink(API_URI, args.url)
+    return getNapsterLink(API_URI, url)
   elif args.pandora == True:
-    return getPandoraLink(API_URI, args.url)
+    return getPandoraLink(API_URI, url)
   elif args.qobuz == True:
-    return getQobuzLink(API_URI, args.url)
+    return getQobuzLink(API_URI, url)
   elif args.songwhip == True:
-    return getSongwhipLink(API_URI, args.url)
+    return getSongwhipLink(API_URI, url)
   elif args.spotify == True:
-    return getSpotifyLink(API_URI, args.url)
+    return getSpotifyLink(API_URI, url)
   elif args.tidal == True:
-    return getTidalLink(API_URI, args.url)
+    return getTidalLink(API_URI, url)
   elif args.youtube == True:
-    return getYouTubeLink(API_URI, args.url)
+    return getYouTubeLink(API_URI, url)
   elif args.youtube_music == True:
-    return getYouTubeMusicLink(API_URI, args.url)
+    return getYouTubeMusicLink(API_URI, url)
 
 def copyToClipboard(link):
   if PYPERCLIP != None:
     pyperclip.copy(link)
   elif CLIPBOARD != None:
     clipboard.set(link)
+  else:
+    print("No clipboard found", file=sys.stderr)
+    exit(1)
+
+def getFromClipboard():
+  if PYPERCLIP != None:
+    return pyperclip.paste()
+  elif CLIPBOARD != None:
+    return clipboard.get()
   else:
     print("No clipboard found", file=sys.stderr)
     exit(1)
